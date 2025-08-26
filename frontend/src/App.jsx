@@ -1,16 +1,23 @@
-import { BrowserRouter,Route,Routes } from "react-router-dom"
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import ExperimentsPreview from './components/ExperimentsPreview'
+import HowItWorks from './components/HowItWorks'
+import Community from './components/Community'
+import Footer from './components/Footer'
 
 function App() {
- return(
-    <BrowserRouter>
-    <Routes  path='/*'>
-      <Route></Route>
-    </Routes>
-
-  </BrowserRouter>
-
-
- )
+	return (
+		<div className="min-h-screen flex flex-col">
+			<Navbar />
+			<main className="flex-1">
+				<Hero />
+				<ExperimentsPreview />
+				<HowItWorks />
+				<Community />
+			</main>
+			<Footer />
+		</div>
+	)
 }
 
 export default App

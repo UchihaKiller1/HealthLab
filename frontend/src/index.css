@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+	--color-primary: #75A64D;
+	--color-secondary: #DBE4D3;
+	--color-accent: #2C5835;
+
+	--font-champ: 'Champ-Black', Anton, sans-serif;
+	--font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+	--shadow-card: 0 10px 20px rgba(0,0,0,0.06), 0 6px 6px rgba(0,0,0,0.05);
+}
+
+html, body, #root {
+	height: 100%;
+}
+
+body {
+	font-family: var(--font-sans);
+	background: radial-gradient(1200px 600px at 10% 10%, rgba(219,228,211,0.6), transparent),
+		linear-gradient(180deg, #ffffff 0%, #f9fcf5 100%);
+	color: #0f172a;
+}
+
+.container-responsive {
+	@apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.font-champ { font-family: var(--font-champ); }
+.shadow-card { box-shadow: var(--shadow-card); }
