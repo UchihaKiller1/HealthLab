@@ -68,16 +68,38 @@ export default function Register() {
     return e;
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     const eObj = validate();
     if (Object.keys(eObj).length) {
       setErrors(eObj);
       return;
     }
-    // TODO: send to backend
-    console.log("Register payload:", { ...form });
-    alert("Registration submitted (demo).");
+    const payload = {
+      firstname: form.firstName,
+      lastname: form.lastName,
+      username: form.username,
+      email: form.email,
+      phone: form.phone,
+      password: form.password,
+    };
+    try {
+      const res = await fetch("http://localhost:4000/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data?.message || data?.error || "Registration failed");
+        return;
+      }
+      alert("Registered successfully");
+      // optional: redirect to login
+      window.location.href = "/login";
+    } catch (err) {
+      alert("Network error: " + err.message);
+    }
   };
 
   function scorePassword(pw) {
