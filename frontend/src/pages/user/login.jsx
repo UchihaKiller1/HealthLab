@@ -54,7 +54,7 @@ export default function Login() {
     }
     // TODO: call login API
     console.log("Login payload:", { ...form });
-    alert("Login submitted (demo).");
+    alert(`Welcome Back ${form.usernameOrEmail}`);
   };
 
   return (
