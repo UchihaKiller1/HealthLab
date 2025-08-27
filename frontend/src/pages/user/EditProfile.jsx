@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./component/Navbar";
-import EditProfileForm from "./component/EditProfileForm";
+import EditProfileForm from "./component/form/EditProfileForm";
 import Footer from "./component/Footer";
 
 const EditProfile = () => {

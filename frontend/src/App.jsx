@@ -4,6 +4,7 @@ import Register from "./pages/user/register";
 import Login from "./pages/user/login";
 import Profile from "./pages/user/Profile";
 import EditProfile from "./pages/user/EditProfile";
+import ChangePasswordPage from "./pages/user/ChangePasswordPage";
 
 function App() {
   return (
@@ -19,6 +20,10 @@ function App() {
         <Route
           path="/edit-profile"
           element={<EditProfile></EditProfile>}
+        ></Route>
+        <Route
+          path="/change-password"
+          element={<ChangePasswordPage></ChangePasswordPage>}
         ></Route>
       </Routes>
     </BrowserRouter>

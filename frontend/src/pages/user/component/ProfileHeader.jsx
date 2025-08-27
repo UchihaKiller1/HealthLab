@@ -14,9 +14,11 @@ const ProfileHeader = () => {
         Enthusiast in cloud-based health experiments. Tracking sleep, fitness,
         and nutrition.
       </p>
-      <button className="mt-4 bg-[#75A64D] text-white px-6 py-2 rounded-lg hover:bg-[#2C5835] transition">
-        Edit Profile
-      </button>
+      <a href="/edit-profile">
+        <button className="mt-4 bg-[#75A64D] text-white px-6 py-2 rounded-lg hover:bg-[#2C5835] transition">
+          Edit Profile
+        </button>
+      </a>
     </section>
   );
 };
