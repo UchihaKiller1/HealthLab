@@ -45,16 +45,30 @@ export default function Login() {
     return e;
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     const eObj = validate();
     if (Object.keys(eObj).length) {
       setErrors(eObj);
       return;
     }
-    // TODO: call login API
-    console.log("Login payload:", { ...form });
-    alert(`Welcome Back ${form.usernameOrEmail}`);
+    try{
+      const res = await fetch("http://localhost:4000/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if(!res.ok){
+        alert(data?.message || data?.error || "Login failed");
+        return;
+      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "/";
+    }catch(err){
+      alert("Network error: " + err.message);
+    }
   };
 
   return (

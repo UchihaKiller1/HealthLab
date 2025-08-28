@@ -5,6 +5,7 @@ import ExperimentCards from "./component/ExperimentCards";
 import StatsSection from "./component/StatsSection";
 import SettingsSection from "./component/SettingsSection";
 import Footer from "./component/Footer";
+import JoinedExperiments from "./component/JoinedExperiments";
 
 const Profile = () => {
   return (
@@ -12,6 +13,7 @@ const Profile = () => {
       <Navbar />
       <ProfileHeader />
       <ExperimentCards />
+      <JoinedExperiments />
       <StatsSection />
       <SettingsSection />
       <Footer />

@@ -64,3 +64,15 @@
     "Segoe UI Symbol", "Noto Color Emoji";
   --font-display: "Champ", var(--font-sans);
 }
+
+/* Utility: Champ display font */
+.font-champ {
+  font-family: var(--font-display);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    @apply font-semibold;
+  }
+}

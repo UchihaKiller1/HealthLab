@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "./component/Navbar";
 
 export default function AboutUs() {
   const [active, setActive] = useState(null);
@@ -12,6 +13,7 @@ export default function AboutUs() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#DBE4D3] to-white text-gray-800">
+      <Navbar />
       {/* HERO */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="space-y-6">
