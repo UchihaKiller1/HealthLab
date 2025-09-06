@@ -78,9 +78,12 @@ export async function listApprovedExperiments(req, res){
 
 export async function listPendingExperiments(req, res){
     try{
+        console.log("listPendingExperiments called by user:", req.user);
         const exps = await Experiment.find({ status: "pending" }).populate("createdBy", "email username").sort({ createdAt: -1 });
+        console.log("Found pending experiments:", exps.length);
         res.json(exps);
     }catch(e){
+        console.error("Error in listPendingExperiments:", e);
         res.status(500).json({ message: "Failed to fetch pending" });
     }
 }
@@ -129,6 +132,23 @@ export async function getExperimentDetails(req, res){
         res.json(exp);
     }catch(e){
         res.status(500).json({ message: "Failed to fetch experiment" });
+    }
+}
+
+export async function deleteMyExperiment(req, res){
+    try{
+        const { id } = req.params;
+        const exp = await Experiment.findById(id);
+        if(!exp) return res.status(404).json({ message: "Not found" });
+        if(String(exp.createdBy) !== String(req.user.id)){
+            return res.status(403).json({ message: "Not allowed" });
+        }
+        await Experiment.findByIdAndDelete(id);
+        // Note: We intentionally skip deleting uploads from disk to avoid race conditions.
+        await Submission.deleteMany({ experimentId: id }).catch(()=>{});
+        res.json({ message: "Deleted", id });
+    }catch(e){
+        res.status(500).json({ message: "Failed to delete" });
     }
 }
 

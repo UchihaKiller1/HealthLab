@@ -51,14 +51,24 @@ export default function Explore(){
         {loading ? (
           <div className="text-gray-600">Loading...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filtered.map(exp => (
-              <div key={exp._id} className="rounded-lg overflow-hidden shadow hover:shadow-lg transition">
-                <img src={exp.imageUrl} alt={exp.title} className="h-40 w-full object-cover" />
-                <div className="p-4">
-                  <div className="text-xs text-gray-500 capitalize">{exp.category}</div>
-                  <h3 className="text-lg font-semibold text-[#2C5835]">{exp.title}</h3>
-                  <p className="text-sm text-gray-700 line-clamp-2">{exp.description}</p>
+              <div key={exp._id} className="w-full aspect-[16/10] bg-white rounded-3xl overflow-hidden shadow hover:shadow-lg transition">
+                <div className="px-6 pb-6 pt-3 h-full flex flex-col">
+                  <h3 className="w-full text-2xl font-champ font-black text-black leading-tight mb-4">{exp.title}</h3>
+                  <div className="flex gap-6 items-start">
+                    <div className="w-1/2">
+                      <div className="w-full aspect-square overflow-hidden">
+                        <img src={`http://localhost:4000${exp.imageUrl}`} alt={exp.title} className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                    <div className="w-1/2 flex flex-col h-full">
+                      <p className="text-xs font-dm-medium text-black leading-relaxed">{exp.description}</p>
+                      <div className="mt-auto self-end">
+                        <button className="bg-gray-200 text-black px-6 py-3 font-dm-bold rounded-none">View Details</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
