@@ -10,16 +10,32 @@ export default function AdminDashboard(){
     async function fetchPending(){
         try{
             const token = localStorage.getItem("token");
+            console.log("Fetching pending experiments...", { API_BASE, token: token ? "exists" : "missing" });
+            
             const res = await fetch(`${API_BASE}/api/experiments/pending`, {
                 headers: { Authorization: token ? `Bearer ${token}` : "" }
             });
+            
+            console.log("Response status:", res.status, res.statusText);
+            
             const data = await res.json();
-            if(res.ok){ setPending(data); }
+            console.log("Response data:", data);
+            
+            if(res.ok){ 
+                console.log("Successfully fetched pending experiments:", data);
+                setPending(data); 
+            }
             else if(res.status === 401 || res.status === 403){
+                console.log("Authentication error, redirecting to login");
                 navigate("/admin/login");
             }
+            else {
+                console.error("API Error:", data);
+                alert(`Error: ${data?.message || data?.error || "Failed to fetch pending experiments"}`);
+            }
         }catch(e){
-            // ignore
+            console.error("Network/Fetch error:", e);
+            alert(`Network error: ${e.message}`);
         }finally{
             setLoading(false);
         }
@@ -66,7 +82,7 @@ export default function AdminDashboard(){
                                         )}
                                     </div>
                                     <h3 className="text-lg font-semibold text-[#2C5835]">{exp.title}</h3>
-                                    <p className="text-sm text-gray-700">{exp.description}</p>
+                                    <p className="text-xs text-gray-600">{exp.description}</p>
                                 </div>
                                 <div className="flex gap-2">
                                     <button onClick={()=>handleAction(exp._id, 'approve')} className="bg-[#75A64D] text-white px-3 py-2 rounded">Approve</button>

@@ -70,6 +70,18 @@
   font-family: var(--font-display);
 }
 
+/* Utility: DM Sans Medium font */
+.font-dm-medium {
+  font-family: "DM Sans";
+  font-weight: 500;
+}
+
+/* Utility: DM Sans Bold font */
+.font-dm-bold {
+  font-family: "DM Sans";
+  font-weight: 700;
+}
+
 @layer base {
   body {
     font-family: var(--font-sans);
