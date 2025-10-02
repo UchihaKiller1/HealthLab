@@ -70,6 +70,7 @@ export default function AdminDashboard(){
                 {loading ? (
                     <div className="text-gray-600">Loading...</div>
                 ) : (
+                    //new added code
                     <div className="space-y-4">
                         {pending.map(exp => (
                             <div key={exp._id} className="p-4 border border-gray-200 rounded-lg flex items-start gap-4">
