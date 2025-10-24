@@ -18,6 +18,7 @@ import PublicProfile from "./pages/user/PublicProfile";
 import Navbar from "./pages/user/component/Navbar";
 import CrowdInsights from "./pages/CrowdInsights";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import AllExperiments from "./pages/admin/AllExperiments";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -28,7 +29,11 @@ const ProtectedRoute = ({ children }) => {
 // Admin Route Component
 const AdminRoute = ({ children }) => {
   const { currentUser } = useAuth();
-  return currentUser?.role === 'admin' ? children : <Navigate to="/admin/login" />;
+  return currentUser?.role === "admin" ? (
+    children
+  ) : (
+    <Navigate to="/admin/login" />
+  );
 };
 
 function AppContent() {
@@ -85,15 +90,25 @@ function AppContent() {
           />
 
           {/* Admin Routes */}
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin">
+            <Route
+              index
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="experiments"
+              element={
+                <AdminRoute>
+                  <AllExperiments />
+                </AdminRoute>
+              }
+            />
+            <Route path="login" element={<AdminLogin />} />
+          </Route>
 
           {/* 404 Route */}
           <Route path="*" element={<Navigate to="/" replace />} />
