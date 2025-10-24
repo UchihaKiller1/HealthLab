@@ -14,6 +14,7 @@ import ExperimentDetails from "./pages/user/ExperimentDetails";
 import Home from "./pages/user/Home";
 import Explore from "./pages/user/Explore";
 import CommunityFeed from "./pages/CommunityFeed";
+import PublicProfile from "./pages/user/PublicProfile";
 import Navbar from "./pages/user/component/Navbar";
 import CrowdInsights from "./pages/CrowdInsights";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -43,6 +44,7 @@ function AppContent() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/crowdinsights" element={<CrowdInsights />} />
           <Route path="/experiments/:id" element={<ExperimentDetails />} />
+          <Route path="/user/:userId" element={<PublicProfile />} />
 
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />

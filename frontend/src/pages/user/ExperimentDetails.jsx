@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DownloadSummaryButton from '../../components/DownloadSummaryButton';
 import ShareButtons from '../../components/ShareButtons';
+import { Avatar, Box, Tooltip, Typography, Button, Paper } from '@mui/material';
+import PeopleIcon from '@mui/icons-material/People';
 
 const ExperimentDetails = () => {
   const { id } = useParams();
@@ -14,6 +16,8 @@ const ExperimentDetails = () => {
   const [submissions, setSubmissions] = useState([]);
   const [hasSubmittedToday, setHasSubmittedToday] = useState(false);
   const [formData, setFormData] = useState({});
+  const [participants, setParticipants] = useState([]);
+  const [showAllParticipants, setShowAllParticipants] = useState(false);
 
   const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
 
@@ -36,6 +40,20 @@ const ExperimentDetails = () => {
           }
         });
         setExperiment(expResponse.data);
+        
+        // Fetch participants
+        try {
+          const participantsRes = await axios.get(`${API_BASE}/api/experiments/${id}/participants`, {
+            headers: { 
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          setParticipants(participantsRes.data);
+        } catch (error) {
+          console.error('Error fetching participants:', error);
+          toast.error('Could not load participants');
+        }
         
         // Get user ID from token (since /api/auth/me is not available)
         let userId = null;
@@ -235,6 +253,43 @@ const ExperimentDetails = () => {
               <dt className="text-sm font-medium text-gray-500">Description</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {experiment.description}
+              </dd>
+            </div>
+            
+            {/* Participants Section */}
+            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 border-t border-gray-200">
+              <dt className="text-sm font-medium text-gray-500">Participants</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div className="flex items-center flex-wrap gap-2">
+                  {participants.length > 0 ? (
+                    <>
+                      {participants.slice(0, showAllParticipants ? participants.length : 6).map((user) => (
+                        <Tooltip key={user._id} title={`${user.firstname} ${user.lastname}`} arrow>
+                          <Link 
+                            to={`/user/${user._id}`}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <img
+                              src={user.profilePicture || '/default-avatar.png'}
+                              alt={`${user.firstname} ${user.lastname}`}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm hover:border-indigo-200 transition-colors"
+                            />
+                          </Link>
+                        </Tooltip>
+                      ))}
+                      {participants.length > 6 && (
+                        <button
+                          onClick={() => setShowAllParticipants(!showAllParticipants)}
+                          className="text-sm text-indigo-600 hover:text-indigo-800 font-medium ml-2"
+                        >
+                          {showAllParticipants ? 'Show less' : `+${participants.length - 6} more`}
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-gray-500">No participants yet</span>
+                  )}
+                </div>
               </dd>
             </div>
             
