@@ -390,15 +390,19 @@ export async function deleteMyExperiment(req, res) {
     const { id } = req.params;
     const exp = await Experiment.findById(id);
     if (!exp) return res.status(404).json({ message: "Not found" });
-    if (String(exp.createdBy) !== String(req.user.id)) {
-      return res.status(403).json({ message: "Not allowed" });
+    
+    // Allow deletion if user is admin or the creator of the experiment
+    if (String(exp.createdBy) !== String(req.user.id) && req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Not authorized to delete this experiment" });
     }
+    
     await Experiment.findByIdAndDelete(id);
-    // Note: We intentionally skip deleting uploads from disk to avoid race conditions.
+
     await Submission.deleteMany({ experimentId: id }).catch(() => {});
-    res.json({ message: "Deleted", id });
+    res.json({ message: "Experiment deleted successfully", id });
   } catch (e) {
-    res.status(500).json({ message: "Failed to delete" });
+    console.error('Error deleting experiment:', e);
+    res.status(500).json({ message: "Failed to delete experiment" });
   }
 }
 
