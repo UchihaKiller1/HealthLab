@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/auth/me', {
+      const response = await axios.get('/api/users/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCurrentUser(response.data);

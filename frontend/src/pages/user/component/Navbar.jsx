@@ -1,42 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const { currentUser, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
-    const handleStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    async function fetchUser() {
-      try {
-        if (!token) {
-          setUser(null);
-          return;
-        }
-        const res = await fetch("http://localhost:4000/users/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-        }
-      } catch (e) {
-        setUser(null);
-      }
-    }
-    fetchUser();
-  }, [isLoggedIn]);
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (!currentUser) return '';
+    const { firstname, lastname, username } = currentUser;
+    if (firstname && lastname) return `${firstname[0]}${lastname[0]}`.toUpperCase();
+    if (username) return username[0].toUpperCase();
+    return 'U';
+  };
 
   return (
     <nav
@@ -48,109 +32,111 @@ const Navbar = () => {
       <Link
         to="/"
         className={`text-3xl font-bold font-champ transition ${
-          isHomePage
-            ? "text-[#B8D703] hover:text-[#CFE063]"
-            : "text-[#2C5835] hover:text-[#75A64D]"
+          isHomePage ? "text-white" : "text-primary"
         }`}
       >
         HealthLab
       </Link>
 
-      {/* Links */}
-      <ul
-        className={`hidden md:flex gap-6 font-light ${
-          isHomePage ? "text-black" : "text-gray-700"
-        }`}
-      >
-        <li>
-          <Link
-            to="/explore"
-            className={
-              isHomePage ? "hover:text-[#DBE4D3]" : "hover:text-[#75A64D]"
-            }
-          >
-            Explore
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/community"
-            className={
-              isHomePage ? "hover:text-[#DBE4D3]" : "hover:text-[#75A64D]"
-            }
-          >
-            Community
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/about"
-            className={
-              isHomePage ? "hover:text-[#DBE4D3]" : "hover:text-[#75A64D]"
-            }
-          >
-            About us
-          </Link>
-        </li>
-        <li>
-          <a
-            href="#"
-            className={`${
-              isHomePage ? "hover:text-[#DBE4D3]" : "hover:text-[#75A64D]"
-            } mr-[80px]`}
-          >
-            Contact us
-          </a>
-        </li>
-      </ul>
-
-      {/* CTA / Profile */}
-      {isLoggedIn ? (
+      {/* Navigation Links */}
+      <div className="hidden md:flex space-x-8 items-center">
         <Link
-          to="/profile"
-          aria-label="Profile"
-          className={`p-2 rounded-full transition ${
-            isHomePage ? "hover:bg-white/20" : "hover:bg-gray-100"
+          to="/explore"
+          className={`hover:text-primary transition ${
+            isHomePage ? "text-black" : "text-gray-700"
           }`}
         >
-          {user?.profilePicture ? (
-            <img
-              src={
-                user.profilePicture.startsWith("http")
-                  ? user.profilePicture
-                  : `http://localhost:4000/${user.profilePicture.replace(
-                      /^\/+/,
-                      ""
-                    )}`
-              }
-              alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className={`w-8 h-8 ${
-                isHomePage ? "text-white" : "text-[#2C5835]"
+          Explore
+        </Link>
+        <Link
+          to="/community"
+          className={`hover:text-primary transition ${
+            isHomePage ? "text-black" : "text-gray-700"
+          }`}
+        >
+          Community
+        </Link>
+        <Link
+          to="/about"
+          className={`hover:text-primary transition ${
+            isHomePage ? "text-black" : "text-gray-700"
+          }`}
+        >
+          About Us
+        </Link>
+        {currentUser && (
+          <Link
+            to="/my-experiments"
+            className={`hover:text-primary transition ${
+              isHomePage ? "text-black" : "text-gray-700"
+            }`}
+          >
+            My Experiments
+          </Link>
+        )}
+      </div>
+
+      {/* Auth Buttons */}
+      <div className="flex items-center space-x-4">
+        {currentUser ? (
+          <div className="flex items-center space-x-4">
+            {currentUser.role === "admin" && (
+              <Link
+                to="/admin"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              >
+                Admin Dashboard
+              </Link>
+            )}
+            <Link
+              to="/profile"
+              className="flex items-center space-x-2"
+            >
+              <span className="text-black">
+                {currentUser.username || "Profile"}
+              </span>
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                {currentUser.profilePicture ? (
+                  <img
+                    src={currentUser.profilePicture}
+                    alt="Profile"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="text-gray-600 font-medium">
+                    {getUserInitials()}
+                  </span>
+                )}
+              </div>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className={`px-4 py-2 rounded-md transition ${
+                isHomePage
+                  ? "text-black hover:bg-white hover:bg-opacity-20"
+                  : "bg-primary text-black hover:bg-primary-dark"
               }`}
             >
-              <path d="M12 12c2.761 0 5-2.686 5-6s-2.239-6-5-6-5 2.686-5 6 2.239 6 5 6zm0 2c-4.418 0-8 3.134-8 7v1h16v-1c0-3.866-3.582-7-8-7z" />
-            </svg>
-          )}
-        </Link>
-      ) : (
-        <Link
-          to="/register"
-          className={`px-5 py-2 rounded-lg transition ${
-            isHomePage
-              ? "bg-white/20 text-white hover:bg-white/30 border border-white/30"
-              : "bg-[#75A64D] text-white hover:bg-[#2C5835]"
-          }`}
-        >
-          Join Now
-        </Link>
-      )}
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="bg-white text-primary px-4 py-2 rounded-md hover:bg-gray-100 transition"
+            >
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };
