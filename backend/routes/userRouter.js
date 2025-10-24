@@ -1,5 +1,5 @@
 import express from "express"
-import { RegisterUser, LoginUser } from "../controllers/userConteoller.js";
+import { RegisterUser, LoginUser, getPublicProfile } from "../controllers/userConteoller.js";
 import { requireAuth } from "../middlewares/auth.js";
 import User from "../models/user.js";
 import multer from "multer";
@@ -10,6 +10,8 @@ const userRouter = express.Router();
 
 userRouter.post("/register", RegisterUser);
 userRouter.post("/login", LoginUser);
+
+// User's own profile (must come before :userId route)
 userRouter.get("/me", requireAuth, async (req, res) => {
     try{
         const user = await User.findById(req.user.id).select("email username firstname lastname role profilePicture phone bio");
@@ -149,5 +151,8 @@ userRouter.delete("/me/avatar", requireAuth, async (req, res) => {
         return res.status(500).json({ message: "Failed to remove avatar" });
     }
 });
+
+// Public profile route for any user
+userRouter.get("/:userId", getPublicProfile);
 
 export default userRouter;

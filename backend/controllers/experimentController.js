@@ -587,6 +587,26 @@ export const getUserStats = async (req, res) => {
   }
 };
 
+export const getExperimentParticipants = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Find the experiment and populate the participants field with user details
+    const experiment = await Experiment.findById(id)
+      .populate('participants', 'firstname lastname email profilePicture username')
+      .select('participants');
+      
+    if (!experiment) {
+      return res.status(404).json({ message: 'Experiment not found' });
+    }
+    
+    res.json(experiment.participants || []);
+  } catch (error) {
+    console.error('Error fetching participants:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 export const getUserSubmissions = async (req, res) => {
   try {
     const userId = req.user.id;
