@@ -46,6 +46,12 @@ const userSchema= new mongoose.Schema({
     },
     bio: {
         type: String
+    },
+    notificationPreferences: {
+        emailNotifications: {
+            type: Boolean,
+            default: true
+        }
     }
 }, { timestamps: true })
 

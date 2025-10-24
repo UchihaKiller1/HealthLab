@@ -57,6 +57,44 @@ export async function LoginUser(req, res) {
   }
 }
 
+export async function updateNotificationPreferences(req, res) {
+  try {
+    const { emailNotifications } = req.body;
+    const userId = req.user.id;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { 
+        $set: { 
+          'notificationPreferences.emailNotifications': emailNotifications 
+        } 
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the updated user data (excluding sensitive information)
+    const userData = {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      role: user.role,
+      profilePicture: user.profilePicture,
+      notificationPreferences: user.notificationPreferences
+    };
+
+    res.json(userData);
+  } catch (error) {
+    console.error('Error updating notification preferences:', error);
+    res.status(500).json({ message: 'Error updating notification preferences' });
+  }
+}
+
 export async function getPublicProfile(req, res) {
   try {
     const { userId } = req.params;

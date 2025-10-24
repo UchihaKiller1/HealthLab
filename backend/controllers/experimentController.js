@@ -1,10 +1,12 @@
 import Experiment from "../models/experiment.js";
+import User from "../models/user.js";
 import multer from "multer";
 import path from "path";
 import Submission from "../models/submission.js";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import fs from "fs";
+import { sendBulkNewExperimentNotifications } from "../utils/emailService.js";
 
 // Helper function to generate CSV content
 const generateCSV = (experiment, submissions) => {
@@ -313,9 +315,27 @@ export async function approveExperiment(req, res) {
       { new: true }
     );
     if (!updated) return res.status(404).json({ message: "Not found" });
+
+    // Get all users who want to receive email notifications
+    const users = await User.find({
+      'notificationPreferences.emailNotifications': { $ne: false }
+    }).select('email firstname username notificationPreferences');
+
+    // Send email notifications in the background
+    if (users.length > 0) {
+      sendBulkNewExperimentNotifications(users, updated.title)
+        .then(result => {
+          console.log(`Sent ${result.notificationsSent} email notifications for new experiment: ${updated.title}`);
+        })
+        .catch(error => {
+          console.error('Error sending email notifications:', error);
+        });
+    }
+
     res.json(updated);
   } catch (e) {
-    res.status(500).json({ message: "Failed to approve" });
+    console.error('Error in approveExperiment:', e);
+    res.status(500).json({ message: "Failed to approve experiment" });
   }
 }
 
