@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function AdminLogin(){
     const [usernameOrEmail, setUsernameOrEmail] = useState("");
@@ -7,32 +8,75 @@ export default function AdminLogin(){
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
     const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
 
-    async function handleSubmit(e){
+    async function handleSubmit(e) {
         e.preventDefault();
         setError("");
         setLoading(true);
-        try{
+        
+        try {
+            console.log('Attempting login with:', { usernameOrEmail });
             const res = await fetch(`${API_BASE}/users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usernameOrEmail, password })
             });
-            const data = await res.json();
-            if(!res.ok){
-                setError(data?.message || data?.error || "Login failed");
+            
+            let data;
+            try {
+                data = await res.json();
+                console.log('Login response:', { status: res.status, data });
+            } catch (jsonError) {
+                console.error('Failed to parse JSON response:', jsonError);
+                throw new Error('Invalid response from server');
+            }
+            
+            if (!res.ok) {
+                const errorMsg = data?.message || data?.error || `Login failed with status ${res.status}`;
+                console.error('Login failed:', errorMsg);
+                setError(errorMsg);
                 return;
             }
-            if(data?.user?.role !== "admin"){
+            
+            if (!data.user) {
+                console.error('No user data in response:', data);
+                setError("Invalid response from server");
+                return;
+            }
+            
+            if (data.user.role !== "admin") {
+                console.log('Access denied - user is not an admin:', data.user);
                 setError("Admin access required.");
                 return;
             }
-            localStorage.setItem("token", data.token);
-            navigate("/admin");
-        }catch(e){
-            setError("Network error");
-        }finally{
+            
+            // Store the token and update auth state
+            const token = data.token || data.accessToken;
+            if (!token) {
+                console.error('No token in response:', data);
+                setError("Authentication failed: No token received");
+                return;
+            }
+            
+            console.log('Login successful, storing token and updating auth state');
+            localStorage.setItem("token", token);
+            
+            // Update the auth context with the user data
+            login({
+              ...data.user,
+              isAdmin: data.user.role === 'admin' // Ensure isAdmin is set for backward compatibility
+            });
+            
+            // Navigate to admin dashboard
+            console.log('Navigating to /admin');
+            navigate("/admin", { replace: true });
+            
+        } catch (e) {
+            console.error("Login error:", e);
+            setError(e.message || "An error occurred during login. Please try again.");
+        } finally {
             setLoading(false);
         }
     }

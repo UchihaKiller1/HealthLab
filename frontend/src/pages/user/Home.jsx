@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./component/Navbar";
 
 export default function Home(){
   const navigate = useNavigate();
@@ -62,9 +61,6 @@ export default function Home(){
     <div>
       {/* First View - Empty for background image and text */}
       <section className="h-screen relative bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/src/assets/home.jpg')" }}>
-        <div className="absolute top-0 left-0 right-0 z-10">
-          <Navbar />
-        </div>
         <div className="flex items-end justify-start h-full pl-16 pb-15">
           <div className="text-left">
             <h1 className="text-6xl font-bold text-[#D9D9D9] leading-tight mb-8">
@@ -129,8 +125,8 @@ export default function Home(){
       </section>
       
       {/* Second View - Popular Challenges */}
-      <section className="min-h-screen bg-[#172117]">
-        <div className="max-w-7xl mx-auto pl-5 pt-28 pr-8 pb-8">
+      <section className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h1 className="text-5xl font-champ font-black text-white">Popular Challenges</h1>
           </div>

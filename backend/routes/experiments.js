@@ -1,6 +1,6 @@
 import express from "express";
 import { requireAuth, requireAdmin } from "../middlewares/auth.js";
-import { upload, createExperiment, listApprovedExperiments, listPendingExperiments, approveExperiment, rejectExperiment, listMyExperiments, getExperimentDetails, joinExperiment, leaveExperiment, listJoinedExperiments, submitDailyData, getDailySubmissionStatus, deleteMyExperiment } from "../controllers/experimentController.js";
+import { upload, createExperiment, listApprovedExperiments, listPendingExperiments, approveExperiment, rejectExperiment, listMyExperiments, getExperimentDetails, joinExperiment, leaveExperiment, listJoinedExperiments, submitDailyData, getDailySubmissionStatus, deleteMyExperiment, downloadExperimentSummary, getUserSubmissions, getUserStats } from "../controllers/experimentController.js";
 
 const router = express.Router();
 
@@ -20,10 +20,15 @@ router.post("/:id/join", requireAuth, joinExperiment);
 router.post("/:id/leave", requireAuth, leaveExperiment);
 router.post("/:id/submit", requireAuth, submitDailyData);
 router.get("/:id/submission-status", requireAuth, getDailySubmissionStatus);
+router.get("/:id/download-summary", requireAuth, downloadExperimentSummary);
 router.delete("/:id", requireAuth, deleteMyExperiment);
 
 // specific routes (must come after specific routes like /pending)
 router.get("/:id", getExperimentDetails);
+
+// Get all submissions for the current user
+router.get("/user/submissions", requireAuth, getUserSubmissions);
+router.get("/user/stats", requireAuth, getUserStats);
 
 export default router;
 

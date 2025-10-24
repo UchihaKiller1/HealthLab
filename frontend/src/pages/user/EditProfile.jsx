@@ -6,7 +6,7 @@ import Footer from "./component/Footer";
 const EditProfile = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <EditProfileForm />
       <Footer />
     </div>

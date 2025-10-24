@@ -6,14 +6,16 @@ import StatsSection from "./component/StatsSection";
 import SettingsSection from "./component/SettingsSection";
 import Footer from "./component/Footer";
 import JoinedExperiments from "./component/JoinedExperiments";
+import ProgressCharts from "../../components/ProgressCharts";
 
 const Profile = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <ProfileHeader />
       <ExperimentCards />
       <JoinedExperiments />
+      <ProgressCharts />
       <StatsSection />
       <SettingsSection />
       <Footer />
