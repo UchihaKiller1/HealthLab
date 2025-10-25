@@ -5,6 +5,7 @@ import cors from "cors";
 import userRouter from "./routes/userRouter.js";
 import experimentsRouter from "./routes/experiments.js";
 import healthLogsRouter from "./routes/healthLogs.js";
+import friendRouter from "./routes/friendRoutes.js";
 import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
@@ -188,3 +189,4 @@ connection.once("open", () => {
 app.use("/users", userRouter);
 app.use("/api/experiments", experimentsRouter);
 app.use("/api/healthlogs", healthLogsRouter);
+app.use("/api/friends", friendRouter);

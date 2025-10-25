@@ -66,14 +66,24 @@ const Navbar = () => {
           About Us
         </Link>
         {currentUser && (
-          <Link
-            to="/my-experiments"
-            className={`hover:text-primary transition ${
-              isHomePage ? "text-black" : "text-gray-700"
-            }`}
-          >
-            My Experiments
-          </Link>
+          <>
+            <Link
+              to="/friends"
+              className={`hover:text-primary transition ${
+                isHomePage ? "text-black" : "text-gray-700"
+              }`}
+            >
+              Friends
+            </Link>
+            <Link
+              to="/my-experiments"
+              className={`hover:text-primary transition ${
+                isHomePage ? "text-black" : "text-gray-700"
+              }`}
+            >
+              My Experiments
+            </Link>
+          </>
         )}
       </div>
 

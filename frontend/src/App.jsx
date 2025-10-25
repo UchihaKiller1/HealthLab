@@ -17,6 +17,7 @@ import CommunityFeed from "./pages/CommunityFeed";
 import PublicProfile from "./pages/user/PublicProfile";
 import Navbar from "./pages/user/component/Navbar";
 import CrowdInsights from "./pages/CrowdInsights";
+import Friends from "./pages/user/Friends";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import ChatContainer from "./components/ChatContainer";
@@ -88,6 +89,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <CreateExperiment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <Friends />
               </ProtectedRoute>
             }
           />
