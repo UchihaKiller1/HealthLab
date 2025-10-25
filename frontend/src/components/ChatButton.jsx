@@ -5,13 +5,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useChat } from '../contexts/ChatContext';
 
 const ChatButton = () => {
-  const { toggleChat, isChatOpen } = useChat();
+  const { toggleChat, isChatOpen, clearMessages } = useChat();
+  
+  const handleClick = () => {
+    if (isChatOpen) {
+      // Clear messages when closing the chat
+      clearMessages();
+    }
+    toggleChat();
+  };
   
   return (
     <Fab 
       color="primary" 
       aria-label="chat"
-      onClick={toggleChat}
+      onClick={handleClick}
       sx={{
         position: 'fixed',
         bottom: 24,
