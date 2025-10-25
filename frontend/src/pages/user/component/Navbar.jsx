@@ -15,11 +15,12 @@ const Navbar = () => {
 
   // Get user initials for avatar
   const getUserInitials = () => {
-    if (!currentUser) return '';
+    if (!currentUser) return "";
     const { firstname, lastname, username } = currentUser;
-    if (firstname && lastname) return `${firstname[0]}${lastname[0]}`.toUpperCase();
+    if (firstname && lastname)
+      return `${firstname[0]}${lastname[0]}`.toUpperCase();
     if (username) return username[0].toUpperCase();
-    return 'U';
+    return "U";
   };
 
   return (
@@ -88,10 +89,7 @@ const Navbar = () => {
                 Admin Dashboard
               </Link>
             )}
-            <Link
-              to="/profile"
-              className="flex items-center space-x-2"
-            >
+            <Link to="/profile" className="flex items-center space-x-2">
               <span className="text-black">
                 {currentUser.username || "Profile"}
               </span>

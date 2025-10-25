@@ -18,6 +18,9 @@ import PublicProfile from "./pages/user/PublicProfile";
 import Navbar from "./pages/user/component/Navbar";
 import CrowdInsights from "./pages/CrowdInsights";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ChatProvider } from "./contexts/ChatContext";
+import ChatContainer from "./components/ChatContainer";
+import ChatButton from "./components/ChatButton";
 import AllExperiments from "./pages/admin/AllExperiments";
 
 // Protected Route Component
@@ -143,7 +146,11 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppContent />
+        <ChatProvider>
+          <AppContent />
+          <ChatContainer />
+          <ChatButton />
+        </ChatProvider>
       </AuthProvider>
     </BrowserRouter>
   );
