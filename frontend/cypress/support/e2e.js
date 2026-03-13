@@ -15,3 +15,6 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+// Catch any remaining uncaught exceptions from the app
+Cypress.on('uncaught:exception', () => false)
