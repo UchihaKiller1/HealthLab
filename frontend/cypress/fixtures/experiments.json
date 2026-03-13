@@ -1,0 +1,54 @@
+{
+  "approved": [
+    {
+      "_id": "exp-1",
+      "title": "10k Steps Challenge",
+      "description": "Walk 10,000 steps every day for 14 days.",
+      "category": "fitness",
+      "durationDays": 14,
+      "imageUrl": "/uploads/steps.png",
+      "runtimeStatus": "active",
+      "formSchema": [
+        { "label": "Steps today", "type": "number" },
+        { "label": "Felt tired?", "type": "checkbox" }
+      ]
+    },
+    {
+      "_id": "exp-2",
+      "title": "Sugar-Free Week",
+      "description": "Avoid added sugar for 7 days.",
+      "category": "diet",
+      "durationDays": 7,
+      "imageUrl": "/uploads/sugarfree.png",
+      "runtimeStatus": "active",
+      "formSchema": []
+    }
+  ],
+  "mine": [
+    {
+      "_id": "exp-mine-1",
+      "title": "Home Created Experiment",
+      "description": "My custom experiment created via UI.",
+      "category": "sleep",
+      "durationDays": 5,
+      "imageUrl": "/uploads/mine.png",
+      "status": "approved",
+      "runtimeStatus": "active",
+      "formSchema": []
+    }
+  ],
+  "joined": [
+    {
+      "_id": "exp-joined-1",
+      "title": "Joined Fitness Experiment",
+      "description": "Experiment joined by the logged-in user.",
+      "category": "fitness",
+      "durationDays": 10,
+      "imageUrl": "/uploads/joined.png",
+      "runtimeStatus": "active",
+      "formSchema": [
+        { "label": "Mood", "type": "dropdown", "options": ["Happy", "Neutral", "Sad"] }
+      ]
+    }
+  ]
+}
