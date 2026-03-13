@@ -4,5 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react({ fastRefresh: false }), // Disabled to allow Cypress e2e tests to run correctly
+    tailwindcss()
+  ],
 })
