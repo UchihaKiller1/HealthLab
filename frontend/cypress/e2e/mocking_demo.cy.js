@@ -1,7 +1,7 @@
 describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
   it('should intercept the GET request and show mocked experiments', () => {
     
-    // 1. STUBBING: This is the "fake" data that replaces your database
+    // 1. STUBBING: This is the "fake" data that replaces the database
     // Categories must match exactly: ["all","fitness","diet","sleep","mental health","other"]
     const mockExperiments = [
       {
@@ -24,11 +24,39 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
         description: "Monitoring fitness levels and physical wellbeing.",
         category: "fitness",
         imageUrl: "/uploads/fitness.png"
+      },
+      {
+        _id: "mock-exp-004",
+        title: "Sleep Quality Study",
+        description: "Understanding sleep patterns and duration effects on health.",
+        category: "sleep",
+        imageUrl: "/uploads/sleep.png"
+      },
+      {
+        _id: "mock-exp-005",
+        title: "Balanced Nutrition Analysis",
+        description: "Research on macronutrient balance and meal timing.",
+        category: "diet",
+        imageUrl: "/uploads/nutrition.png"
+      },
+      {
+        _id: "mock-exp-006",
+        title: "Stress Management Techniques",
+        description: "Exploring mindfulness and relaxation methods for mental wellbeing.",
+        category: "mental health",
+        imageUrl: "/uploads/stress.png"
+      },
+      {
+        _id: "mock-exp-007",
+        title: "Wearable Device Accuracy",
+        description: "Comparing different health tracking devices and their accuracy.",
+        category: "other",
+        imageUrl: "/uploads/wearables.png"
       }
     ];
 
-    // 2. MOCKING: Catch the call to your backend (Port 4000)
-    // We use cy.intercept to act as a "Quality Gate"
+    // 2. MOCKING: Catch the call to the backend (Port 4000)
+    // using cy.intercept to act as a "Quality Gate"
     cy.intercept('GET', 'http://localhost:4000/api/experiments', {
       statusCode: 200,
       body: mockExperiments,
@@ -41,10 +69,12 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
     cy.wait('@fetchExperiments');
     
     // Check if the experiments are rendered on screen
-    cy.get('h3').should('have.length', 3);
+    cy.get('h3').should('have.length', 7);
     cy.get('h3').first().should('contain', 'Cypress QE Experiment');
     cy.get('h3').eq(1).should('contain', 'Testing Fitness Methods');
     cy.get('h3').eq(2).should('contain', 'Advanced Fitness Check');
+    cy.get('h3').eq(3).should('contain', 'Sleep Quality Study');
+    cy.get('h3').eq(4).should('contain', 'Balanced Nutrition Analysis');
   });
 
   it('should filter experiments by category using mocked data', () => {
@@ -70,6 +100,27 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
         description: "Fitness and endurance.",
         category: "fitness",
         imageUrl: "/uploads/jog.png"
+      },
+      {
+        _id: "mock-exp-004",
+        title: "Sleep Duration Impact",
+        description: "How sleep affects performance.",
+        category: "sleep",
+        imageUrl: "/uploads/sleep-study.png"
+      },
+      {
+        _id: "mock-exp-005",
+        title: "Mental Health Awareness",
+        description: "Understanding anxiety and coping strategies.",
+        category: "mental health",
+        imageUrl: "/uploads/mental-health.png"
+      },
+      {
+        _id: "mock-exp-006",
+        title: "Health Tech Review",
+        description: "Testing and comparing health tracking apps.",
+        category: "other",
+        imageUrl: "/uploads/tech.png"
       }
     ];
 
@@ -82,7 +133,7 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
     cy.wait('@fetchExperiments');
 
     // All experiments should be visible
-    cy.get('h3').should('have.length', 3);
+    cy.get('h3').should('have.length', 6);
 
     // Click on 'fitness' category filter
     cy.contains('button', 'fitness').click();
@@ -116,6 +167,27 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
         description: "Meditation and stress relief.",
         category: "mental health",
         imageUrl: "/uploads/mental.png"
+      },
+      {
+        _id: "mock-exp-004",
+        title: "Gluten-Free Diet Effects",
+        description: "Exploring dietary changes and health outcomes.",
+        category: "diet",
+        imageUrl: "/uploads/diet-effects.png"
+      },
+      {
+        _id: "mock-exp-005",
+        title: "Circadian Rhythm Study",
+        description: "How sleep schedules affect cognitive function.",
+        category: "sleep",
+        imageUrl: "/uploads/circadian.png"
+      },
+      {
+        _id: "mock-exp-006",
+        title: "Environmental Health Impact",
+        description: "Studying effects of air quality on respiratory health.",
+        category: "other",
+        imageUrl: "/uploads/environment.png"
       }
     ];
 
@@ -128,7 +200,7 @@ describe('Quality Engineering: Mocking/Stubbing Demo - Explore Page', () => {
     cy.wait('@fetchExperiments');
 
     // All experiments should be visible
-    cy.get('h3').should('have.length', 3);
+    cy.get('h3').should('have.length', 6);
 
     // Search for "Cypress"
     cy.get('input[placeholder="Search experiments..."]').type('Cypress');
