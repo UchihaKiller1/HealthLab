@@ -1,0 +1,22 @@
+{
+  "validUser": {
+    "id": "user-1",
+    "username": "testuser",
+    "usernameOrEmail": "testuser",
+    "email": "testuser@example.com",
+    "password": "Password123!",
+    "role": "user"
+  },
+  "adminUser": {
+    "id": "admin-1",
+    "username": "adminuser",
+    "usernameOrEmail": "adminuser",
+    "email": "admin@example.com",
+    "password": "AdminPass123!",
+    "role": "admin"
+  },
+  "invalidUser": {
+    "usernameOrEmail": "wronguser@example.com",
+    "password": "WrongPass123"
+  }
+}
